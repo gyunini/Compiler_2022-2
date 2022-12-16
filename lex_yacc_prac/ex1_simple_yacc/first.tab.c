@@ -66,8 +66,8 @@
 
 
 /* First part of user prologue.  */
-#line 2 "first.y"
-
+#line 1 "first.y"
+ // .y만 사용하는 예제 -> 간단한 수식계산기 - 한 라인밖에 못함 멀티라인은 구현 안됨, 멀티라인 -> syntax error
 #include <stdio.h>
 #include <ctype.h>
 extern int yylex();
@@ -440,16 +440,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  8
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   10
+#define YYLAST   16
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  9
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS  5
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  8
+#define YYNRULES  9
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  15
+#define YYNSTATES  17
 
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   258
@@ -496,7 +496,7 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int8 yyrline[] =
 {
-       0,    13,    13,    15,    16,    18,    19,    21,    22
+       0,    12,    12,    13,    15,    16,    18,    19,    21,    22
 };
 #endif
 
@@ -519,7 +519,7 @@ static const yytype_int16 yytoknum[] =
 };
 # endif
 
-#define YYPACT_NINF (-6)
+#define YYPACT_NINF (-8)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -533,8 +533,8 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      -3,    -6,    -3,     1,     3,    -4,    -6,    -2,    -6,    -6,
-      -3,    -3,    -6,    -4,    -6
+      -2,    -8,    -2,     0,     6,    -4,    -8,     1,    -8,     8,
+      -8,    -2,    -2,    -8,    -8,    -4,    -8
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -542,14 +542,14 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     8,     0,     0,     0,     4,     6,     0,     1,     2,
-       0,     0,     7,     3,     5
+       0,     9,     0,     0,     0,     5,     7,     0,     1,     0,
+       2,     0,     0,     8,     3,     4,     6
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-      -6,    -6,     7,    -5,    -1
+      -8,    -8,    12,    -7,     4
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
@@ -563,34 +563,34 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-       1,     8,    11,    10,     2,    13,    12,     9,    10,     7,
-      14
+       8,     1,    12,     1,    15,     2,    11,     2,     0,    13,
+      10,    11,    14,    11,     7,     9,    16
 };
 
 static const yytype_int8 yycheck[] =
 {
-       3,     0,     6,     5,     7,    10,     8,     4,     5,     2,
-      11
+       0,     3,     6,     3,    11,     7,     5,     7,    -1,     8,
+       4,     5,     4,     5,     2,     3,    12
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     3,     7,    10,    11,    12,    13,    11,     0,     4,
-       5,     6,     8,    12,    13
+       0,     3,     7,    10,    11,    12,    13,    11,     0,    11,
+       4,     5,     6,     8,     4,    12,    13
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,     9,    10,    11,    11,    12,    12,    13,    13
+       0,     9,    10,    10,    11,    11,    12,    12,    13,    13
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     2,     3,     1,     3,     1,     3,     1
+       0,     2,     2,     3,     3,     1,     3,     1,     3,     1
 };
 
 
@@ -1286,31 +1286,37 @@ yyreduce:
   switch (yyn)
     {
   case 2:
-#line 13 "first.y"
+#line 12 "first.y"
                         { printf("%d\n", yyvsp[-1]); }
 #line 1292 "first.tab.c"
     break;
 
   case 3:
-#line 15 "first.y"
-                        { yyval = yyvsp[-2] + yyvsp[0]; }
+#line 13 "first.y"
+                        { printf("%d\n", yyvsp[-1]); }
 #line 1298 "first.tab.c"
     break;
 
-  case 5:
-#line 18 "first.y"
-                        { yyval = yyvsp[-2] * yyvsp[0]; }
+  case 4:
+#line 15 "first.y"
+                        { yyval = yyvsp[-2] + yyvsp[0]; }
 #line 1304 "first.tab.c"
     break;
 
-  case 7:
-#line 21 "first.y"
-                        { yyval = yyvsp[-1]; }
+  case 6:
+#line 18 "first.y"
+                        { yyval = yyvsp[-2] * yyvsp[0]; }
 #line 1310 "first.tab.c"
     break;
 
+  case 8:
+#line 21 "first.y"
+                        { yyval = yyvsp[-1]; }
+#line 1316 "first.tab.c"
+    break;
 
-#line 1314 "first.tab.c"
+
+#line 1320 "first.tab.c"
 
       default: break;
     }

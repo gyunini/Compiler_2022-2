@@ -20,6 +20,7 @@ int codegen_umin();
 %%
 
 S : ID{push();} '='{push();} E{codegen_assign();}
+   | S S
    ;
 E : E '+'{push();} T{codegen();}
    | E '-'{push();} T{codegen();}

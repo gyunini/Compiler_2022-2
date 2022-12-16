@@ -5,7 +5,7 @@
 
 %%
 
-([0-9]+|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?)     { yylval = atof(yytext); return NUM;}
+([0-9]+|([0-9]*\.[0-9]+)([eE][-+]?[0-9]+)?)     { yylval = atof(yytext); return NUM;} // atof****
 [ \t] ; // ignore white space
 \n |
 .           return yytext[0]; // . => \n을 제외한 모든 글자 (정규표현의 정의)

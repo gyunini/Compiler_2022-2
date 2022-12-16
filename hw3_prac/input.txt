@@ -1,0 +1,16 @@
+main()
+{
+int hello_3;
+int a d c;
+int a;
+int arr[2][3];
+int r; 
+double pi; 
+b = 10 a;
+b = 10++a;
+b = arr[1];
+r = 5; 
+pi = 3.14; 
+area = pi * r * r; 
+cir = pi * r + pi * r;
+}

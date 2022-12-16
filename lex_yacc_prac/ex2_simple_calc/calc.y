@@ -1,4 +1,4 @@
-%{ // .y .l 파일 분리 예제 -> 멀티라인은 못함
+%{ // 간단한 수식 계산기의 .y .l 파일 분리 예제 -> 멀티라인은 못함
 #include <stdio.h>
 extern int yylex();
 extern void yyerror(const char*);
