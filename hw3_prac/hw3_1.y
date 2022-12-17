@@ -87,11 +87,10 @@
 %%
 
 
-program: MAIN '('')''{' body '}'
-        | error  { yyerror('재입력하시오\n'); }
-        ;
-body: varstmt stmtlist
-        ;
+program: varstmt stmtlist
+      //  | stmtlist varstmt  // 변수 선언 중간에 가능하게 하는 문법
+       | error  { yyerror('재입력하시오\n'); }
+       ;
 
 varstmt: vardecl varstmt
         |
@@ -142,7 +141,7 @@ arrlist: ID '[' INTEGER ']'     {
                                       strcpy(arr_second_temp_type, arr_first_temp_type);
                                       strcpy(arr_first_temp_type, "");
                                     }
-                                    strcpy(arr_first_temp_type, make_arr_type($3, "int", arr_type)); // arr(3, int)
+                                    strcpy(arr_first_temp_type, make_arr_type($3, arr_first_temp_type, arr_type)); // arr(3, int)
                                       if(arrcnt>=2) { // 3차원 배열 타입선언을 위한 코드
                                       memmove(arr_second_temp_type + (arrcnt-1)*8 + 1*(arrcnt-1), arr_first_temp_type, strlen(arr_first_temp_type));
                                       memmove(arr_temp_type + (arrcnt-1)*8 + 1*(arrcnt-1), arr_second_temp_type, strlen(arr_second_temp_type));
@@ -168,8 +167,13 @@ stmtlist: stmt stmtlist
 stmt : ID '=' INTEGER ';' {
                             int i;
                             i=search_symbol($1);
-                            if(i==-1)
-                              printf("\n Undefined Variable");
+                            char s1[10];
+                            if(i==-1) {
+                              // yyerror("\n Undefined Variable");
+                              make_symtab_entry($1, "int", 0);
+                              sprintf(s1, "%d", $3);
+                              addQuadruple("=","",s1,$1);
+                            }
                             else {
                               char temp[10];
                               if(strcmp(Sym[i].sym_type,"int")==0) // *****
@@ -185,8 +189,14 @@ stmt : ID '=' INTEGER ';' {
     | ID '=' DOUBLE ';' {
                             int i;
                             i=search_symbol($1);
-                            if(i==-1)
-                              printf("\n Undefined Variable");
+                            char s1[10];
+                            if(i==-1) {
+                              // yyerror("\n Undefined Variable");
+                              make_symtab_entry($1, "double", 0);
+                              sprintf(s1, "%f", $3);
+                              // printf("%s\n", s1);
+                              addQuadruple("=","",s1,$1);
+                            }
                             else {
                               char temp[10];
                               if(strcmp(Sym[i].sym_type,"int")==0) // *****
@@ -202,8 +212,12 @@ stmt : ID '=' INTEGER ';' {
                         int i,j;
                         i=search_symbol($1);
                         j=search_symbol($3);
-                        if(i==-1 || j==-1)
-                          printf("\n Undefined Variable");
+                        if(i==-1 || j==-1){
+                          // yyerror("\nsyntax error Undefined Variable");
+                          make_symtab_entry($1, "int", 0); // 타입 없이 a = t와 같은 형태인 경우
+                          make_symtab_entry($3, "int", 0); // 임의로 int로 타입 지정
+                          addQuadruple("=","",$3,$1);
+                        }
                         else
                           addQuadruple("=","",$3,$1);
                         lineNo++;
@@ -213,6 +227,13 @@ stmt : ID '=' INTEGER ';' {
                               char* temp;
                               char* temp1;
                               char* um = "-";
+                              int i;
+                              i=search_symbol($1);
+                              if(i==-1)
+                              {
+                                // yyerror("\n Undefined Variable\n");
+                                make_symtab_entry($1, Stk.types[Stk.top], 0);
+                              }
                               temp = Stk.items[Stk.top];
                               temp1 = Stk.types[Stk.top];
                               // printf("stacktop: %s\n", temp);
@@ -230,20 +251,16 @@ stmt : ID '=' INTEGER ';' {
                               lineNo++;
                            }
       | error  
-
-
     ;
-arrstmt: ID '[' INTEGER ']'         { first_int_array_param = $3; arrStmtCnt++;}
 
-       | arrstmt '[' INTEGER ']'    { second_int_array_param = $3; arrStmtCnt++;}
+arrstmt: ID '=' arrdeclstmt ';' {                          
+                              addQuadruple("=","",pop(),$1);
+                              temp_var++;
+                              lineNo++;
+                        }
+       | ID '=' arrexpr ';' {lineNo++;}
 
-       | ID '[' ID ']'          { strcpy(first_char_array_param, $3); arrStmtCnt++;}
-
-       | arrstmt '[' ID ']'     { strcpy(second_char_array_param, $3); arrStmtCnt++;}
-
-       | expr arrstmt ';'           // { printf("======\n"); }
-
-       | ID '=' arrstmt ';' {
+arrdeclstmt:  arraydecl  {
                       // printf("array 중간코드 생성 %d!!!\n", arrcnt);
                       int i;
                       char* k;
@@ -266,18 +283,20 @@ arrstmt: ID '[' INTEGER ']'         { first_int_array_param = $3; arrStmtCnt++;}
                       // printf("---%s---\n", arr_temp_type);
                       // printf("---%c---\n", arr_temp_type[15]);
                       if(arrStmtCnt == 1) {
-                          char s1[10];       // 변환한 문자열을 저장할 배열
-                          // char s2[10];       // 변환한 문자열을 저장할 배열
+                          char s1[20];       // 변환한 문자열을 저장할 배열
+                          char s2[20];       // 변환한 문자열을 저장할 배열
                           // char s3[10];       // 변환한 문자열을 저장할 배열
                           if(first_int_array_param != 0){
-                            printf("%d\n", first_int_array_param);
+                            // printf("%d\n", first_int_array_param);
                             sprintf(s1, "%d", first_int_array_param);
-                            printf("%s\n",s1);
+                            // printf("s1왜 안찍히냐 %s\n",s1);
+                            strcpy(s2, s1);
+                            addQuadruple("*", "4", s2, str1);
                           }
-                          if(first_char_array_param)
+                          if(strlen(first_char_array_param) != 0){
                             strcpy(s1, first_char_array_param);
-                          // sprintf(s3, "%d", t);
-                          addQuadruple("*", "4", s1, str1);
+                            addQuadruple("*", "4", s1, str1);
+                          }
                           strcpy(arrName, arr_temp_name);
                           strcat(arrName, "[");
                           strcat(arrName, str1);
@@ -286,6 +305,7 @@ arrstmt: ID '[' INTEGER ']'         { first_int_array_param = $3; arrStmtCnt++;}
                           sprintf(str4, "%d", temp_var);
                           memmove(str5+1, str4, 1);
                           addQuadruple("=","", arrName, str5);
+                          push(str5, arr_temp_type);
                       } else if (arrStmtCnt == 2) {
                         //addQuadruple("",pop(),pop(),str1);
                         // printf("first param, second param: %d %d\n", first_int_array_param, second_int_array_param);
@@ -297,11 +317,15 @@ arrstmt: ID '[' INTEGER ']'         { first_int_array_param = $3; arrStmtCnt++;}
                         k = (arr_temp_type + 15);
                         // printf("%d\n", atoi(k));
                         t = atoi(k) * 4;
-                        sprintf(s1, "%d", first_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
-                        if(first_char_array_param)
+                        if(first_int_array_param != 0){
+                          sprintf(s1, "%d", first_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
+                        }
+                        if(strlen(first_char_array_param) != 0)
                           strcpy(s1, first_char_array_param);
-                        sprintf(s2, "%d", second_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
-                        if(second_char_array_param)
+                        if(second_int_array_param != 0){
+                          sprintf(s2, "%d", second_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
+                        }
+                        if(strlen(second_char_array_param) != 0)
                           strcpy(s2, second_char_array_param);
                         sprintf(s3, "%d", t);    // %d를 지정하여 정수를 문자열로 저장
                         // printf("first param, second param: %s %s\n", s1, s2);
@@ -324,11 +348,35 @@ arrstmt: ID '[' INTEGER ']'         { first_int_array_param = $3; arrStmtCnt++;}
                         memmove(str5+1, str4, 1);
                         addQuadruple("=","", arrName, str5);
                         push(str5, arr_temp_type);
-                        addQuadruple("=","",pop(),$1);
-                        temp_var++;
+                        // addQuadruple("=","",pop(),$1);
+                        // temp_var++;
                       }
-                      lineNo++;
                     }
+        ;
+                    
+arrexpr: arrdeclstmt '+' arrdeclstmt { 
+                                printf("array plus\n"); 
+                                // char str[5],str1[5]="t";
+                                // sprintf(str, "%d", temp_var);    // 버퍼 str에 있는 t와 temp_var 0을 붙임 -> t0, t1 ..... 등 temporary 변수 생성
+                                // strcat(str1,str);
+                                // temp_var++;
+                                // addQuadruple("+",pop(), str1, str1);
+                             } 
+       | arrdeclstmt '-' arrdeclstmt { printf("array minus\n"); } 
+       | arrdeclstmt '*' arrdeclstmt { printf("array mul\n"); } 
+       | arrdeclstmt '/' arrdeclstmt { printf("array div\n"); } 
+       | arrdeclstmt
+       ;
+
+arraydecl: ID '[' INTEGER ']'         { first_int_array_param = $3; arrStmtCnt++;}
+
+       | arraydecl '[' INTEGER ']'    { second_int_array_param = $3; arrStmtCnt++;}
+
+       | ID '[' ID ']'          { strcpy(first_char_array_param, $3); arrStmtCnt++;}
+
+       | arraydecl '[' ID ']'     { strcpy(second_char_array_param, $3); arrStmtCnt++;}
+
+       
         ;
 
 expr : expr '+' expr  {
@@ -495,7 +543,10 @@ expr : expr '+' expr  {
         j = search_symbol_type($1);
         //printf("-----%s type: %s-----\n",$1 ,j);
         if(i==-1) // symbol table에 없는 경우
-          printf("\n Undefined Variable\n");
+        {
+          // printf("\n Undefined Variable\n");
+          make_symtab_entry($1, "int", 0);
+        }
          else // 있으면 index i리턴
           push($1, j);              
         }
@@ -521,7 +572,7 @@ int main()
 {
    
   Stk.top = -1; // 스택의 top을 -1로 초기화
-  yyin = fopen("input.txt","r");
+  yyin = fopen("exp.in","r");
   yyparse();
   display_sym_tab();
   printf("\n\n");
@@ -629,24 +680,27 @@ void display_sym_tab()
 {
   int i;
   printf("------------The Symbol Table--------\n\n");
-  printf(" Name   Type    offset    Value");
+  // printf(" Name   Type    offset    Value");
+  // for(i=0;i<sym_cnt;i++)
+  //   fprintf(stdout, "\n %s      %s    %d       %f",Sym[i].sym_name,Sym[i].sym_type, Sym[i].sym_offset, Sym[i].value);
+  printf(" Name        Type      offset");
   for(i=0;i<sym_cnt;i++)
-    printf("\n %s      %s    %d       %f",Sym[i].sym_name,Sym[i].sym_type, Sym[i].sym_offset, Sym[i].value);
+    fprintf(stdout, "\n %s         %s          %d ",Sym[i].sym_name,Sym[i].sym_type, Sym[i].sym_offset);
   printf("\n\n------------------------------------\n");
 }
 void display_Quadruple()
 {
   int i;
-  printf("----------INTERMEDIATE CODE---------\n");
+  fprintf(stderr, "----------INTERMEDIATE CODE---------\n");
   //printf("\n     Result  Operator  Operand1  Operand2  ");
   for(i=0;i<Index;i++) {
    //printf("\n %d     %s          %s          %s          %s",i,QUAD[i].result,QUAD[i].operator,QUAD[i].operand1,QUAD[i].operand2);
     if (strcmp(QUAD[i].operator, "=") == 0)
-      printf("%s = %s\n", QUAD[i].result, QUAD[i].operand1);
+      fprintf(stderr, "%s = %s\n", QUAD[i].result, QUAD[i].operand1);
     else 
-      printf("%s = %s %s %s\n", QUAD[i].result, QUAD[i].operand1, QUAD[i].operator, QUAD[i].operand2);
+      fprintf(stderr, "%s = %s %s %s\n", QUAD[i].result, QUAD[i].operand1, QUAD[i].operator, QUAD[i].operand2);
   }
-  printf("------------------------------------\n");
+  fprintf(stderr, "------------------------------------\n");
 }
 
 int yyerror(char const *s, int charCnt)
@@ -696,29 +750,18 @@ void addQuadruple(char op[10],char op2[10],char op1[10],char res[10])
 
 
 
-/*
-int r; 
-double pi; 
-r = 5; 
-pi = 3.14; 
-area = pi * r * r; 
-cir = pi * r + pi * r;
-
-r = 5
-pi = 3.14
-t1 = inttoreal r
-t2 = pi * t1
-t3 = inttoreal r
-t4 = t2 * t3
-area = t4
-t5 = inttoreal r
-t6 = pi * t5
-t7 = inttoreal r
-t8 = pi * t7
-t9 = t6 + t8
-cir = t9
-*/
-
-//에러처리
+// int hello_3;
 // int a d c;
+// int a;
+// int arr[2][3];
+// int r; 
+// double pi; 
 // b = 10 a;
+// b = 10++a;
+// b = arr[i][j];
+// r = 5; 
+// pi = 3.14; 
+// area = pi * r * r; 
+// cir = pi * r + pi * r;
+// b = arr[1][2] + arr[2][3];
+// c = arr[1][2] * arr[2][3];

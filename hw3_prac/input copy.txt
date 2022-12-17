@@ -1,0 +1,15 @@
+int arr[2][3];
+int hello_3;
+int a d c;
+int a;
+int r; 
+double pi; 
+b = arr[1][2] + arr[2][3];
+c = arr[1][2] * arr[2][3];
+b = 10 a;
+b = 10++a;
+b = arr[i][j];
+r = 5; 
+pi = 3.14; 
+area = pi * r * r; 
+cir = pi * r + pi * r;

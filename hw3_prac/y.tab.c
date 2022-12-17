@@ -515,18 +515,18 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  5
+#define YYFINAL  10
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   126
+#define YYLAST   91
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  23
+#define YYNTOKENS  21
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  11
+#define YYNNTS  13
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  40
+#define YYNRULES  45
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  83
+#define YYNSTATES  80
 
 #define YYUNDEFTOK  2
 #define YYMAXUTOK   264
@@ -545,15 +545,15 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      14,    15,    10,     8,    19,     9,     2,    11,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    18,
-       2,    22,     2,     2,     2,     2,     2,     2,     2,     2,
+      19,    20,    10,     8,    15,     9,     2,    11,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,    14,
+       2,    18,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    20,     2,    21,     2,     2,     2,     2,     2,     2,
+       2,    16,     2,    17,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,    16,     2,    17,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -574,11 +574,11 @@ static const yytype_int8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,    90,    90,    91,    93,    96,    97,   101,   102,   105,
-     114,   122,   125,   134,   157,   158,   162,   163,   164,   165,
-     168,   185,   201,   212,   232,   236,   238,   240,   242,   244,
-     246,   334,   369,   405,   441,   479,   481,   489,   491,   503,
-     509
+       0,    90,    90,    92,    95,    96,   100,   101,   104,   113,
+     121,   124,   133,   156,   157,   161,   162,   163,   164,   167,
+     189,   211,   226,   253,   256,   261,   263,   357,   365,   366,
+     367,   368,   371,   373,   375,   377,   382,   417,   453,   489,
+     527,   529,   537,   539,   554,   560
 };
 #endif
 
@@ -588,10 +588,10 @@ static const yytype_int16 yyrline[] =
 static const char *const yytname[] =
 {
   "$end", "error", "$undefined", "INTEGER", "DOUBLE", "TYPE", "ID",
-  "MAIN", "'+'", "'-'", "'*'", "'/'", "UMINUS", "UPLUS", "'('", "')'",
-  "'{'", "'}'", "';'", "','", "'['", "']'", "'='", "$accept", "program",
-  "body", "varstmt", "vardecl", "varlist", "arrlist", "stmtlist", "stmt",
-  "arrstmt", "expr", YY_NULLPTR
+  "MAIN", "'+'", "'-'", "'*'", "'/'", "UMINUS", "UPLUS", "';'", "','",
+  "'['", "']'", "'='", "'('", "')'", "$accept", "program", "varstmt",
+  "vardecl", "varlist", "arrlist", "stmtlist", "stmt", "arrstmt",
+  "arrdeclstmt", "arrexpr", "arraydecl", "expr", YY_NULLPTR
 };
 #endif
 
@@ -601,17 +601,17 @@ static const char *const yytname[] =
 static const yytype_int16 yytoknum[] =
 {
        0,   256,   257,   258,   259,   260,   261,   262,    43,    45,
-      42,    47,   263,   264,    40,    41,   123,   125,    59,    44,
-      91,    93,    61
+      42,    47,   263,   264,    59,    44,    91,    93,    61,    40,
+      41
 };
 # endif
 
-#define YYPACT_NINF (-25)
+#define YYPACT_NINF (-32)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-38)
+#define YYTABLE_NINF (-19)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -620,15 +620,14 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      12,   -25,   -10,    17,    -6,   -25,    16,    32,     9,    25,
-      42,    32,    34,    41,     3,    35,   -25,    50,   -25,   -25,
-      80,    76,    76,    76,   -25,    42,    27,    67,   -25,    71,
-     -25,    77,   -25,    85,    46,    83,   -25,   -25,   -25,    -3,
-     -25,    63,   -25,    81,    76,    76,    76,    76,    87,    74,
-     -25,    94,    97,    98,   102,   104,    -2,    88,    54,    76,
-      76,   -25,   100,   105,    90,    99,   101,   -25,   -25,   -25,
-     -25,   -25,   -25,   -25,   -25,   -25,   -25,   -25,   -25,   103,
-     103,   -25,   -25
+      44,   -32,    16,    60,    47,     5,    48,    50,    10,    -9,
+     -32,    67,    51,   -32,    47,    47,   -32,    65,   -32,    64,
+     -32,    68,     0,   -32,   -32,    57,   -32,    58,    59,    62,
+      49,    12,    12,    12,    25,    63,    66,    32,   -32,   -32,
+     -32,   -32,   -32,    55,   -32,   -32,   -32,   -32,   -32,     3,
+      72,    72,    72,    72,   -32,   -32,    56,    12,    12,    12,
+      12,   -32,    69,    70,   -32,    73,   -32,   -32,   -32,   -32,
+      71,    74,    27,    27,   -32,   -32,   -32,   -32,   -32,   -32
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -636,29 +635,28 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     3,     0,     0,     0,     1,     0,     6,     0,     0,
-       0,     6,    11,    10,     0,     0,     2,    24,    40,    39,
-      38,     0,     0,     0,     4,     0,     0,     0,     5,     0,
-       7,     0,     8,     0,     0,     0,    38,    37,    36,     0,
-      16,     0,    17,    38,     0,     0,     0,     0,     0,     0,
-       9,     0,     0,     0,    40,    39,    38,     0,     0,     0,
-       0,    35,     0,     0,     0,    31,    32,    33,    34,    29,
-      12,    13,    25,    27,    20,    21,    22,    30,    23,    31,
-      32,    26,    28
+       0,     3,     0,     0,     0,     5,    10,     9,     0,     0,
+       1,    23,     0,     2,     0,     0,     4,     0,     6,     0,
+       7,     0,     0,    15,    16,     0,     8,     0,    45,    44,
+      43,     0,     0,     0,     0,     0,    26,     0,    11,    12,
+      19,    20,    21,     0,    45,    44,    43,    42,    41,     0,
+       0,     0,     0,     0,    24,    25,     0,     0,     0,     0,
+       0,    22,     0,     0,    40,     0,    27,    28,    29,    30,
+       0,     0,    36,    37,    38,    39,    32,    34,    33,    35
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -25,   -25,   -25,   112,   -25,   -25,   -25,    91,   -25,   -24,
-     -21
+     -32,   -32,    75,   -32,   -32,   -32,    37,   -32,   -32,     4,
+     -32,   -32,   -31
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     3,     9,    10,    11,    14,    15,    24,    25,    26,
-      27
+      -1,     3,     4,     5,     8,     9,    13,    14,    15,    34,
+      35,    36,    37
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -666,71 +664,64 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      37,    38,    39,    48,     4,    59,    60,    46,    47,     6,
-      12,    57,    61,     1,    58,    13,    76,     5,    34,     2,
-      64,    30,    31,    65,    66,    67,    68,   -14,    17,   -14,
-      18,    19,     7,    20,    48,    21,    22,     8,    79,    80,
-      57,    23,    16,    17,   -18,    18,    19,    41,    20,    52,
-      21,    22,    53,    32,   -15,    33,    23,    18,    19,   -18,
-      43,    29,    44,    45,    46,    47,    62,   -19,    23,    63,
-      18,    19,    78,    43,    49,    44,    45,    46,    47,    18,
-      19,    23,    36,    50,    21,    22,    54,    55,    51,    56,
-      23,    21,    22,    18,    19,    70,    43,    23,    21,    22,
-      34,    34,    35,    64,    23,    69,    77,    41,    41,   -37,
-     -37,   -36,   -36,    46,    47,    71,    40,    42,    72,    73,
-      74,    81,    75,    28,     0,     0,    82
+      47,    48,    49,    28,    29,    20,    30,    21,    31,    32,
+       2,    57,    58,    59,    60,    44,    45,     6,    46,    33,
+      31,    32,     7,    64,    18,    19,    72,    73,    74,    75,
+     -13,    33,   -13,    50,    51,    52,    53,    59,    60,    54,
+      57,    58,    59,    60,    -5,     1,    61,   -17,    11,     2,
+      -5,    23,    24,    12,    66,    67,    68,    69,    62,    70,
+      10,    63,    71,    42,   -14,    43,    17,   -18,    25,    22,
+      26,    27,     0,    40,    38,    39,    41,    55,    65,     0,
+      16,     0,    56,     0,     0,     0,    76,    77,    78,    43,
+       0,    79
 };
 
 static const yytype_int8 yycheck[] =
 {
-      21,    22,    23,    27,    14,     8,     9,    10,    11,    15,
-       1,    35,    15,     1,    35,     6,    18,     0,    20,     7,
-      22,    18,    19,    44,    45,    46,    47,    18,     1,    20,
-       3,     4,    16,     6,    58,     8,     9,     5,    59,    60,
-      64,    14,    17,     1,    17,     3,     4,    20,     6,     3,
-       8,     9,     6,    18,    20,    20,    14,     3,     4,    17,
-       6,    20,     8,     9,    10,    11,     3,    17,    14,     6,
-       3,     4,    18,     6,     3,     8,     9,    10,    11,     3,
-       4,    14,     6,     6,     8,     9,     3,     4,     3,     6,
-      14,     8,     9,     3,     4,    21,     6,    14,     8,     9,
-      20,    20,    22,    22,    14,    18,    18,    20,    20,    10,
-      11,    10,    11,    10,    11,    21,    25,    26,    21,    21,
-      18,    21,    18,    11,    -1,    -1,    21
+      31,    32,    33,     3,     4,    14,     6,    16,     8,     9,
+       5,     8,     9,    10,    11,     3,     4,     1,     6,    19,
+       8,     9,     6,    20,    14,    15,    57,    58,    59,    60,
+      14,    19,    16,     8,     9,    10,    11,    10,    11,    14,
+       8,     9,    10,    11,     0,     1,    14,     0,     1,     5,
+       6,    14,    15,     6,    50,    51,    52,    53,     3,     3,
+       0,     6,     6,    14,    16,    16,    16,     0,     3,    18,
+       6,     3,    -1,    14,    17,    17,    14,    14,     6,    -1,
+       5,    -1,    16,    -1,    -1,    -1,    17,    17,    17,    16,
+      -1,    17
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     1,     7,    24,    14,     0,    15,    16,     5,    25,
-      26,    27,     1,     6,    28,    29,    17,     1,     3,     4,
-       6,     8,     9,    14,    30,    31,    32,    33,    26,    20,
-      18,    19,    18,    20,    20,    22,     6,    33,    33,    33,
-      30,    20,    30,     6,     8,     9,    10,    11,    32,     3,
-       6,     3,     3,     6,     3,     4,     6,    32,    33,     8,
-       9,    15,     3,     6,    22,    33,    33,    33,    33,    18,
-      21,    21,    21,    21,    18,    18,    18,    18,    18,    33,
-      33,    21,    21
+       0,     1,     5,    22,    23,    24,     1,     6,    25,    26,
+       0,     1,     6,    27,    28,    29,    23,    16,    14,    15,
+      14,    16,    18,    27,    27,     3,     6,     3,     3,     4,
+       6,     8,     9,    19,    30,    31,    32,    33,    17,    17,
+      14,    14,    14,    16,     3,     4,     6,    33,    33,    33,
+       8,     9,    10,    11,    14,    14,    16,     8,     9,    10,
+      11,    14,     3,     6,    20,     6,    30,    30,    30,    30,
+       3,     6,    33,    33,    33,    33,    17,    17,    17,    17
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    23,    24,    24,    25,    26,    26,    27,    27,    28,
-      28,    28,    29,    29,    29,    29,    30,    30,    30,    30,
-      31,    31,    31,    31,    31,    32,    32,    32,    32,    32,
-      32,    33,    33,    33,    33,    33,    33,    33,    33,    33,
-      33
+       0,    21,    22,    22,    23,    23,    24,    24,    25,    25,
+      25,    26,    26,    26,    26,    27,    27,    27,    27,    28,
+      28,    28,    28,    28,    29,    29,    30,    31,    31,    31,
+      31,    31,    32,    32,    32,    32,    33,    33,    33,    33,
+      33,    33,    33,    33,    33,    33
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     6,     1,     2,     2,     0,     3,     3,     3,
-       1,     1,     4,     4,     0,     1,     2,     2,     0,     1,
-       4,     4,     4,     4,     1,     4,     4,     4,     4,     3,
-       4,     3,     3,     3,     3,     3,     2,     2,     1,     1,
-       1
+       0,     2,     2,     1,     2,     0,     3,     3,     3,     1,
+       1,     4,     4,     0,     1,     2,     2,     0,     1,     4,
+       4,     4,     4,     1,     4,     4,     1,     3,     3,     3,
+       3,     1,     4,     4,     4,     4,     3,     3,     3,     3,
+       3,     2,     2,     1,     1,     1
 };
 
 
@@ -1426,25 +1417,25 @@ yyreduce:
   switch (yyn)
     {
   case 3:
-#line 91 "hw3_1.y"
-                 { yyerror('재입력하시오\n'); }
-#line 1432 "y.tab.c"
+#line 92 "hw3_1.y"
+                { yyerror('재입력하시오\n'); }
+#line 1423 "y.tab.c"
+    break;
+
+  case 6:
+#line 100 "hw3_1.y"
+                          {lineNo++;}
+#line 1429 "y.tab.c"
     break;
 
   case 7:
 #line 101 "hw3_1.y"
                           {lineNo++;}
-#line 1438 "y.tab.c"
+#line 1435 "y.tab.c"
     break;
 
   case 8:
-#line 102 "hw3_1.y"
-                          {lineNo++;}
-#line 1444 "y.tab.c"
-    break;
-
-  case 9:
-#line 105 "hw3_1.y"
+#line 104 "hw3_1.y"
                         {   // 콤마 변수 선언
                             int i;
                             i=search_symbol((yyvsp[0].string));
@@ -1453,11 +1444,11 @@ yyreduce:
                             else
                               make_symtab_entry((yyvsp[0].string),(yyvsp[-3].string),0); // $3를 테이블 엔트리에 저장, 타입은 string타입으로 $0(이 rule이 적용되기 전의 stack의 top위치), val은 0으로 초기화
                         }
-#line 1457 "y.tab.c"
+#line 1448 "y.tab.c"
     break;
 
-  case 10:
-#line 114 "hw3_1.y"
+  case 9:
+#line 113 "hw3_1.y"
                         {                
                             int i;
                             i=search_symbol((yyvsp[0].string));
@@ -1466,11 +1457,11 @@ yyreduce:
                             else
                               make_symtab_entry((yyvsp[0].string),(yyvsp[-1].string),0);
                         }
-#line 1470 "y.tab.c"
+#line 1461 "y.tab.c"
     break;
 
-  case 12:
-#line 125 "hw3_1.y"
+  case 11:
+#line 124 "hw3_1.y"
                                 {
                                     strcpy(arr_temp_name, (yyvsp[-3].string));
                                     strcpy(arr_first_temp_type, (yyvsp[-4].string));
@@ -1479,11 +1470,11 @@ yyreduce:
                                     arrcnt++;
                                     make_symtab_entry(arr_temp_name, arr_temp_type, 0);
                                 }
-#line 1483 "y.tab.c"
+#line 1474 "y.tab.c"
     break;
 
-  case 13:
-#line 134 "hw3_1.y"
+  case 12:
+#line 133 "hw3_1.y"
                                 {
                                     char* temp;
                                     char* temp1;
@@ -1495,7 +1486,7 @@ yyreduce:
                                       strcpy(arr_second_temp_type, arr_first_temp_type);
                                       strcpy(arr_first_temp_type, "");
                                     }
-                                    strcpy(arr_first_temp_type, make_arr_type((yyvsp[-1].ival), "int", arr_type)); // arr(3, int)
+                                    strcpy(arr_first_temp_type, make_arr_type((yyvsp[-1].ival), arr_first_temp_type, arr_type)); // arr(3, int)
                                       if(arrcnt>=2) { // 3차원 배열 타입선언을 위한 코드
                                       memmove(arr_second_temp_type + (arrcnt-1)*8 + 1*(arrcnt-1), arr_first_temp_type, strlen(arr_first_temp_type));
                                       memmove(arr_temp_type + (arrcnt-1)*8 + 1*(arrcnt-1), arr_second_temp_type, strlen(arr_second_temp_type));
@@ -1506,16 +1497,21 @@ yyreduce:
                                     make_symtab_entry(arr_temp_name, arr_temp_type, 0);
                                     arrcnt++;
                                   }
-#line 1510 "y.tab.c"
+#line 1501 "y.tab.c"
     break;
 
-  case 20:
-#line 168 "hw3_1.y"
+  case 19:
+#line 167 "hw3_1.y"
                           {
                             int i;
                             i=search_symbol((yyvsp[-3].string));
-                            if(i==-1)
-                              printf("\n Undefined Variable");
+                            char s1[10];
+                            if(i==-1) {
+                              // yyerror("\n Undefined Variable");
+                              make_symtab_entry((yyvsp[-3].string), "int", 0);
+                              sprintf(s1, "%d", (yyvsp[-1].ival));
+                              addQuadruple("=","",s1,(yyvsp[-3].string));
+                            }
                             else {
                               char temp[10];
                               if(strcmp(Sym[i].sym_type,"int")==0) // *****
@@ -1527,16 +1523,22 @@ yyreduce:
                             }
                             lineNo++;
                    }
-#line 1531 "y.tab.c"
+#line 1527 "y.tab.c"
     break;
 
-  case 21:
-#line 185 "hw3_1.y"
+  case 20:
+#line 189 "hw3_1.y"
                         {
                             int i;
                             i=search_symbol((yyvsp[-3].string));
-                            if(i==-1)
-                              printf("\n Undefined Variable");
+                            char s1[10];
+                            if(i==-1) {
+                              // yyerror("\n Undefined Variable");
+                              make_symtab_entry((yyvsp[-3].string), "double", 0);
+                              sprintf(s1, "%f", (yyvsp[-1].dval));
+                              // printf("%s\n", s1);
+                              addQuadruple("=","",s1,(yyvsp[-3].string));
+                            }
                             else {
                               char temp[10];
                               if(strcmp(Sym[i].sym_type,"int")==0) // *****
@@ -1547,30 +1549,41 @@ yyreduce:
                             }
                             lineNo++;
                    }
-#line 1551 "y.tab.c"
+#line 1553 "y.tab.c"
     break;
 
-  case 22:
-#line 201 "hw3_1.y"
+  case 21:
+#line 211 "hw3_1.y"
                    {
                         int i,j;
                         i=search_symbol((yyvsp[-3].string));
                         j=search_symbol((yyvsp[-1].string));
-                        if(i==-1 || j==-1)
-                          printf("\n Undefined Variable");
+                        if(i==-1 || j==-1){
+                          // yyerror("\nsyntax error Undefined Variable");
+                          make_symtab_entry((yyvsp[-3].string), "int", 0); // 타입 없이 a = t와 같은 형태인 경우
+                          make_symtab_entry((yyvsp[-1].string), "int", 0); // 임의로 int로 타입 지정
+                          addQuadruple("=","",(yyvsp[-1].string),(yyvsp[-3].string));
+                        }
                         else
                           addQuadruple("=","",(yyvsp[-1].string),(yyvsp[-3].string));
                         lineNo++;
                     }
-#line 1566 "y.tab.c"
+#line 1572 "y.tab.c"
     break;
 
-  case 23:
-#line 212 "hw3_1.y"
+  case 22:
+#line 226 "hw3_1.y"
                            { 
                               char* temp;
                               char* temp1;
                               char* um = "-";
+                              int i;
+                              i=search_symbol((yyvsp[-3].string));
+                              if(i==-1)
+                              {
+                                // yyerror("\n Undefined Variable\n");
+                                make_symtab_entry((yyvsp[-3].string), Stk.types[Stk.top], 0);
+                              }
                               temp = Stk.items[Stk.top];
                               temp1 = Stk.types[Stk.top];
                               // printf("stacktop: %s\n", temp);
@@ -1587,36 +1600,28 @@ yyreduce:
                               }
                               lineNo++;
                            }
-#line 1591 "y.tab.c"
+#line 1604 "y.tab.c"
+    break;
+
+  case 24:
+#line 256 "hw3_1.y"
+                                {                          
+                              addQuadruple("=","",pop(),(yyvsp[-3].string));
+                              temp_var++;
+                              lineNo++;
+                        }
+#line 1614 "y.tab.c"
     break;
 
   case 25:
-#line 236 "hw3_1.y"
-                                    { first_int_array_param = (yyvsp[-1].ival); arrStmtCnt++;}
-#line 1597 "y.tab.c"
+#line 261 "hw3_1.y"
+                            {lineNo++;}
+#line 1620 "y.tab.c"
     break;
 
   case 26:
-#line 238 "hw3_1.y"
-                                    { second_int_array_param = (yyvsp[-1].ival); arrStmtCnt++;}
-#line 1603 "y.tab.c"
-    break;
-
-  case 27:
-#line 240 "hw3_1.y"
-                                { strcpy(first_char_array_param, (yyvsp[-1].string)); arrStmtCnt++;}
-#line 1609 "y.tab.c"
-    break;
-
-  case 28:
-#line 242 "hw3_1.y"
-                                { strcpy(second_char_array_param, (yyvsp[-1].string)); arrStmtCnt++;}
-#line 1615 "y.tab.c"
-    break;
-
-  case 30:
-#line 246 "hw3_1.y"
-                            {
+#line 263 "hw3_1.y"
+                         {
                       // printf("array 중간코드 생성 %d!!!\n", arrcnt);
                       int i;
                       char* k;
@@ -1639,18 +1644,20 @@ yyreduce:
                       // printf("---%s---\n", arr_temp_type);
                       // printf("---%c---\n", arr_temp_type[15]);
                       if(arrStmtCnt == 1) {
-                          char s1[10];       // 변환한 문자열을 저장할 배열
-                          // char s2[10];       // 변환한 문자열을 저장할 배열
+                          char s1[20];       // 변환한 문자열을 저장할 배열
+                          char s2[20];       // 변환한 문자열을 저장할 배열
                           // char s3[10];       // 변환한 문자열을 저장할 배열
                           if(first_int_array_param != 0){
-                            printf("%d\n", first_int_array_param);
+                            // printf("%d\n", first_int_array_param);
                             sprintf(s1, "%d", first_int_array_param);
-                            printf("%s\n",s1);
+                            // printf("s1왜 안찍히냐 %s\n",s1);
+                            strcpy(s2, s1);
+                            addQuadruple("*", "4", s2, str1);
                           }
-                          if(first_char_array_param)
+                          if(strlen(first_char_array_param) != 0){
                             strcpy(s1, first_char_array_param);
-                          // sprintf(s3, "%d", t);
-                          addQuadruple("*", "4", s1, str1);
+                            addQuadruple("*", "4", s1, str1);
+                          }
                           strcpy(arrName, arr_temp_name);
                           strcat(arrName, "[");
                           strcat(arrName, str1);
@@ -1659,6 +1666,7 @@ yyreduce:
                           sprintf(str4, "%d", temp_var);
                           memmove(str5+1, str4, 1);
                           addQuadruple("=","", arrName, str5);
+                          push(str5, arr_temp_type);
                       } else if (arrStmtCnt == 2) {
                         //addQuadruple("",pop(),pop(),str1);
                         // printf("first param, second param: %d %d\n", first_int_array_param, second_int_array_param);
@@ -1670,11 +1678,15 @@ yyreduce:
                         k = (arr_temp_type + 15);
                         // printf("%d\n", atoi(k));
                         t = atoi(k) * 4;
-                        sprintf(s1, "%d", first_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
-                        if(first_char_array_param)
+                        if(first_int_array_param != 0){
+                          sprintf(s1, "%d", first_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
+                        }
+                        if(strlen(first_char_array_param) != 0)
                           strcpy(s1, first_char_array_param);
-                        sprintf(s2, "%d", second_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
-                        if(second_char_array_param)
+                        if(second_int_array_param != 0){
+                          sprintf(s2, "%d", second_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
+                        }
+                        if(strlen(second_char_array_param) != 0)
                           strcpy(s2, second_char_array_param);
                         sprintf(s3, "%d", t);    // %d를 지정하여 정수를 문자열로 저장
                         // printf("first param, second param: %s %s\n", s1, s2);
@@ -1697,16 +1709,70 @@ yyreduce:
                         memmove(str5+1, str4, 1);
                         addQuadruple("=","", arrName, str5);
                         push(str5, arr_temp_type);
-                        addQuadruple("=","",pop(),(yyvsp[-3].string));
-                        temp_var++;
+                        // addQuadruple("=","",pop(),$1);
+                        // temp_var++;
                       }
-                      lineNo++;
                     }
-#line 1706 "y.tab.c"
+#line 1717 "y.tab.c"
     break;
 
-  case 31:
-#line 334 "hw3_1.y"
+  case 27:
+#line 357 "hw3_1.y"
+                                     { 
+                                printf("array plus\n"); 
+                                // char str[5],str1[5]="t";
+                                // sprintf(str, "%d", temp_var);    // 버퍼 str에 있는 t와 temp_var 0을 붙임 -> t0, t1 ..... 등 temporary 변수 생성
+                                // strcat(str1,str);
+                                // temp_var++;
+                                // addQuadruple("+",pop(), str1, str1);
+                             }
+#line 1730 "y.tab.c"
+    break;
+
+  case 28:
+#line 365 "hw3_1.y"
+                                     { printf("array minus\n"); }
+#line 1736 "y.tab.c"
+    break;
+
+  case 29:
+#line 366 "hw3_1.y"
+                                     { printf("array mul\n"); }
+#line 1742 "y.tab.c"
+    break;
+
+  case 30:
+#line 367 "hw3_1.y"
+                                     { printf("array div\n"); }
+#line 1748 "y.tab.c"
+    break;
+
+  case 32:
+#line 371 "hw3_1.y"
+                                      { first_int_array_param = (yyvsp[-1].ival); arrStmtCnt++;}
+#line 1754 "y.tab.c"
+    break;
+
+  case 33:
+#line 373 "hw3_1.y"
+                                      { second_int_array_param = (yyvsp[-1].ival); arrStmtCnt++;}
+#line 1760 "y.tab.c"
+    break;
+
+  case 34:
+#line 375 "hw3_1.y"
+                                { strcpy(first_char_array_param, (yyvsp[-1].string)); arrStmtCnt++;}
+#line 1766 "y.tab.c"
+    break;
+
+  case 35:
+#line 377 "hw3_1.y"
+                                  { strcpy(second_char_array_param, (yyvsp[-1].string)); arrStmtCnt++;}
+#line 1772 "y.tab.c"
+    break;
+
+  case 36:
+#line 382 "hw3_1.y"
                       {
                         char str[5],str1[5]="t"; // 버퍼 선언
                         char str2[5], str3[5] ="t"; // 초기 temp_var = 0을 str버퍼에 저장
@@ -1742,11 +1808,11 @@ yyreduce:
                             push(str1, "double");
                         }
                     }
-#line 1746 "y.tab.c"
+#line 1812 "y.tab.c"
     break;
 
-  case 32:
-#line 369 "hw3_1.y"
+  case 37:
+#line 417 "hw3_1.y"
                      {
                         char str[5],str1[5]="t"; // 버퍼 선언
                         char str2[5], str3[5] ="t"; // 초기 temp_var = 0을 str버퍼에 저장
@@ -1782,11 +1848,11 @@ yyreduce:
                             push(str1, "double");
                         }
                     }
-#line 1786 "y.tab.c"
+#line 1852 "y.tab.c"
     break;
 
-  case 33:
-#line 405 "hw3_1.y"
+  case 38:
+#line 453 "hw3_1.y"
                     {
                     char str[5],str1[5]="t"; // 버퍼 선언
                         char str2[5], str3[5] ="t"; // 초기 temp_var = 0을 str버퍼에 저장
@@ -1822,11 +1888,11 @@ yyreduce:
                             push(str1, "double");
                         }
                 }
-#line 1826 "y.tab.c"
+#line 1892 "y.tab.c"
     break;
 
-  case 34:
-#line 441 "hw3_1.y"
+  case 39:
+#line 489 "hw3_1.y"
                     {
                         char str[5],str1[5]="t"; // 버퍼 선언
                         char str2[5], str3[5] ="t"; // 초기 temp_var = 0을 str버퍼에 저장
@@ -1864,11 +1930,11 @@ yyreduce:
                             push(str1, "double");
                         }
                     }
-#line 1868 "y.tab.c"
+#line 1934 "y.tab.c"
     break;
 
-  case 36:
-#line 481 "hw3_1.y"
+  case 41:
+#line 529 "hw3_1.y"
                               {
                                 char* temp;
                                 char temp1[5] = "-";
@@ -1876,11 +1942,11 @@ yyreduce:
                                 strcat(temp1, temp);   // int snprintf ( char * s, size_t n, const char * format, ... ); 버퍼에 저장, 크기만큼 리턴
                                 push(temp1, "int");
                               }
-#line 1880 "y.tab.c"
+#line 1946 "y.tab.c"
     break;
 
-  case 38:
-#line 491 "hw3_1.y"
+  case 43:
+#line 539 "hw3_1.y"
          {                     
         int i;
         char* j;
@@ -1888,35 +1954,38 @@ yyreduce:
         j = search_symbol_type((yyvsp[0].string));
         //printf("-----%s type: %s-----\n",$1 ,j);
         if(i==-1) // symbol table에 없는 경우
-          printf("\n Undefined Variable\n");
+        {
+          // printf("\n Undefined Variable\n");
+          make_symtab_entry((yyvsp[0].string), "int", 0);
+        }
          else // 있으면 index i리턴
           push((yyvsp[0].string), j);              
         }
-#line 1896 "y.tab.c"
+#line 1965 "y.tab.c"
     break;
 
-  case 39:
-#line 503 "hw3_1.y"
+  case 44:
+#line 554 "hw3_1.y"
              {       
                 char temp[10]; // 버퍼 선언
                 snprintf(temp,10,"%f",(yyvsp[0].dval));   // int snprintf ( char * s, size_t n, const char * format, ... ); 버퍼에 저장, 크기만큼 리턴
                 push(temp, "double");               // 저장된 버퍼를 스택에 push
             }
-#line 1906 "y.tab.c"
+#line 1975 "y.tab.c"
     break;
 
-  case 40:
-#line 509 "hw3_1.y"
+  case 45:
+#line 560 "hw3_1.y"
               {       
                 char temp[10]; // 버퍼 선언
                 snprintf(temp,10,"%d",(yyvsp[0].ival));   // int snprintf ( char * s, size_t n, const char * format, ... ); 버퍼에 저장, 크기만큼 리턴
                 push(temp, "int");               // 저장된 버퍼를 스택에 push
             }
-#line 1916 "y.tab.c"
+#line 1985 "y.tab.c"
     break;
 
 
-#line 1920 "y.tab.c"
+#line 1989 "y.tab.c"
 
       default: break;
     }
@@ -2148,7 +2217,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 517 "hw3_1.y"
+#line 568 "hw3_1.y"
 
 
 extern FILE *yyin;
@@ -2156,7 +2225,7 @@ int main()
 {
    
   Stk.top = -1; // 스택의 top을 -1로 초기화
-  yyin = fopen("input.txt","r");
+  yyin = fopen("exp.in","r");
   yyparse();
   display_sym_tab();
   printf("\n\n");
@@ -2264,24 +2333,27 @@ void display_sym_tab()
 {
   int i;
   printf("------------The Symbol Table--------\n\n");
-  printf(" Name   Type    offset    Value");
+  // printf(" Name   Type    offset    Value");
+  // for(i=0;i<sym_cnt;i++)
+  //   fprintf(stdout, "\n %s      %s    %d       %f",Sym[i].sym_name,Sym[i].sym_type, Sym[i].sym_offset, Sym[i].value);
+  printf(" Name        Type      offset");
   for(i=0;i<sym_cnt;i++)
-    printf("\n %s      %s    %d       %f",Sym[i].sym_name,Sym[i].sym_type, Sym[i].sym_offset, Sym[i].value);
+    fprintf(stdout, "\n %s         %s          %d ",Sym[i].sym_name,Sym[i].sym_type, Sym[i].sym_offset);
   printf("\n\n------------------------------------\n");
 }
 void display_Quadruple()
 {
   int i;
-  printf("----------INTERMEDIATE CODE---------\n");
+  fprintf(stderr, "----------INTERMEDIATE CODE---------\n");
   //printf("\n     Result  Operator  Operand1  Operand2  ");
   for(i=0;i<Index;i++) {
    //printf("\n %d     %s          %s          %s          %s",i,QUAD[i].result,QUAD[i].operator,QUAD[i].operand1,QUAD[i].operand2);
     if (strcmp(QUAD[i].operator, "=") == 0)
-      printf("%s = %s\n", QUAD[i].result, QUAD[i].operand1);
+      fprintf(stderr, "%s = %s\n", QUAD[i].result, QUAD[i].operand1);
     else 
-      printf("%s = %s %s %s\n", QUAD[i].result, QUAD[i].operand1, QUAD[i].operator, QUAD[i].operand2);
+      fprintf(stderr, "%s = %s %s %s\n", QUAD[i].result, QUAD[i].operand1, QUAD[i].operator, QUAD[i].operand2);
   }
-  printf("------------------------------------\n");
+  fprintf(stderr, "------------------------------------\n");
 }
 
 int yyerror(char const *s, int charCnt)
@@ -2331,29 +2403,18 @@ void addQuadruple(char op[10],char op2[10],char op1[10],char res[10])
 
 
 
-/*
-int r; 
-double pi; 
-r = 5; 
-pi = 3.14; 
-area = pi * r * r; 
-cir = pi * r + pi * r;
-
-r = 5
-pi = 3.14
-t1 = inttoreal r
-t2 = pi * t1
-t3 = inttoreal r
-t4 = t2 * t3
-area = t4
-t5 = inttoreal r
-t6 = pi * t5
-t7 = inttoreal r
-t8 = pi * t7
-t9 = t6 + t8
-cir = t9
-*/
-
-//에러처리
+// int hello_3;
 // int a d c;
+// int a;
+// int arr[2][3];
+// int r; 
+// double pi; 
 // b = 10 a;
+// b = 10++a;
+// b = arr[i][j];
+// r = 5; 
+// pi = 3.14; 
+// area = pi * r * r; 
+// cir = pi * r + pi * r;
+// b = arr[1][2] + arr[2][3];
+// c = arr[1][2] * arr[2][3];
