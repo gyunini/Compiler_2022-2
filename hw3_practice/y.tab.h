@@ -49,31 +49,15 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    INTEGER = 258,
-    DOUBLE = 259,
-    TYPE = 260,
-    ID = 261,
-    MAIN = 262,
-    UMINUS = 263,
-    UPLUS = 264
+    ID = 258,
+    NUM = 259,
+    UMINUS = 260
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-union YYSTYPE
-{
-#line 65 "hw3_1.y"
-
-    int ival;          
-    double dval;
-    char string[10];
-    int arrval;
-
-#line 74 "y.tab.h"
-
-};
-typedef union YYSTYPE YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

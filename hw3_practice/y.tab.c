@@ -66,70 +66,21 @@
 
 
 /* First part of user prologue.  */
-#line 1 "hw3_1.y"
+#line 1 "hw3.y"
 
-    #include<stdio.h>
-    #include<string.h>
-    #include<stdlib.h>   
+#include <stdio.h>
+extern FILE* yyin;
+extern char* yytext;
+extern int yylex();
+extern void yyerror(const char*);
+#include<ctype.h>
+#include <string.h>
+int codegen_assign();
+int codegen();
+int push();
+int codegen_umin();
 
-  struct Symbol_Table
-  {
-     char sym_name[10];
-     char sym_type[100];
-     double value;
-     int sym_offset;
-  }Sym[10];
-
-  int sym_cnt=0;
-  int Index=0;
-  int temp_var=1;
-  int offset = 0;
-
-  char arr_temp_type[100];
-  char arr_temp_name[10];
-  char arrName[10];
-  char arr_first_temp_type[100];
-  char arr_second_temp_type[100];
-  int arrcnt = 0;
-  int arrStmtCnt = 0;
-  int arrcheck = 0;
-  int lineNo = 1;
-
-  int first_int_array_param = 0;
-  int second_int_array_param = 0;
-  char first_char_array_param[2];
-  char second_char_array_param[2];
-
-
-
-  int search_symbol(char []);
-  char* search_symbol_type(char []);
-  void make_symtab_entry(char [],char [],double);
-  void display_sym_tab();  
-  void addQuadruple(char [],char [],char [],char []);
-  void display_Quadruple();
-  void push(char*, char*);
-  char* pop();
-  char* make_arr_type(int, char[], char []);
- void strintrude (char *, char *, int);
-
-  struct Quadruple
-  {
-    char operator[5];
-    char operand1[10];
-    char operand2[10];
-    char result[10];
-  }QUAD[25];
-
- struct Stack
-  {
-    char *items[10];
-    char *types[10];
-    int top;
-  }Stk;
-
-
-#line 133 "y.tab.c"
+#line 84 "y.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -177,31 +128,15 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    INTEGER = 258,
-    DOUBLE = 259,
-    TYPE = 260,
-    ID = 261,
-    MAIN = 262,
-    UMINUS = 263,
-    UPLUS = 264
+    ID = 258,
+    NUM = 259,
+    UMINUS = 260
   };
 #endif
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-union YYSTYPE
-{
-#line 65 "hw3_1.y"
-
-    int ival;          
-    double dval;
-    char string[10];
-    int arrval;
-
-#line 202 "y.tab.c"
-
-};
-typedef union YYSTYPE YYSTYPE;
+typedef int YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif
@@ -515,21 +450,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL  10
+#define YYFINAL  4
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   91
+#define YYLAST   21
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS  21
+#define YYNTOKENS  13
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  13
+#define YYNNTS  12
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  45
+#define YYNRULES  20
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  80
+#define YYNSTATES  31
 
 #define YYUNDEFTOK  2
-#define YYMAXUTOK   264
+#define YYMAXUTOK   260
 
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
@@ -545,12 +480,12 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-      19,    20,    10,     8,    15,     9,     2,    11,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,    14,
-       2,    18,     2,     2,     2,     2,     2,     2,     2,     2,
+      11,    12,     8,     6,     2,     7,     2,     9,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
+       2,     5,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,    16,     2,    17,     2,     2,     2,     2,     2,     2,
+       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
@@ -567,18 +502,16 @@ static const yytype_int8 yytranslate[] =
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
        2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,    12,    13
+      10
 };
 
 #if YYDEBUG
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_int16 yyrline[] =
+static const yytype_int8 yyrline[] =
 {
-       0,    90,    90,    92,    95,    96,   100,   101,   104,   113,
-     121,   124,   133,   156,   157,   161,   162,   163,   164,   167,
-     189,   211,   226,   253,   256,   261,   263,   357,   365,   366,
-     367,   368,   371,   373,   375,   377,   382,   417,   453,   489,
-     527,   529,   537,   539,   554,   560
+       0,    22,    22,    22,    22,    23,    25,    25,    26,    26,
+      27,    29,    29,    30,    30,    31,    33,    34,    34,    35,
+      36
 };
 #endif
 
@@ -587,11 +520,9 @@ static const yytype_int16 yyrline[] =
    First, the terminals, then, starting at YYNTOKENS, nonterminals.  */
 static const char *const yytname[] =
 {
-  "$end", "error", "$undefined", "INTEGER", "DOUBLE", "TYPE", "ID",
-  "MAIN", "'+'", "'-'", "'*'", "'/'", "UMINUS", "UPLUS", "';'", "','",
-  "'['", "']'", "'='", "'('", "')'", "$accept", "program", "varstmt",
-  "vardecl", "varlist", "arrlist", "stmtlist", "stmt", "arrstmt",
-  "arrdeclstmt", "arrexpr", "arraydecl", "expr", YY_NULLPTR
+  "$end", "error", "$undefined", "ID", "NUM", "'='", "'+'", "'-'", "'*'",
+  "'/'", "UMINUS", "'('", "')'", "$accept", "S", "$@1", "$@2", "E", "$@3",
+  "$@4", "T", "$@5", "$@6", "F", "$@7", YY_NULLPTR
 };
 #endif
 
@@ -600,18 +531,17 @@ static const char *const yytname[] =
    (internal) symbol number NUM (which must be that of a token).  */
 static const yytype_int16 yytoknum[] =
 {
-       0,   256,   257,   258,   259,   260,   261,   262,    43,    45,
-      42,    47,   263,   264,    59,    44,    91,    93,    61,    40,
-      41
+       0,   256,   257,   258,   259,    61,    43,    45,    42,    47,
+     260,    40,    41
 };
 # endif
 
-#define YYPACT_NINF (-32)
+#define YYPACT_NINF (-16)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
 
-#define YYTABLE_NINF (-19)
+#define YYTABLE_NINF (-1)
 
 #define yytable_value_is_error(Yyn) \
   0
@@ -620,14 +550,10 @@ static const yytype_int16 yytoknum[] =
      STATE-NUM.  */
 static const yytype_int8 yypact[] =
 {
-      44,   -32,    16,    60,    47,     5,    48,    50,    10,    -9,
-     -32,    67,    51,   -32,    47,    47,   -32,    65,   -32,    64,
-     -32,    68,     0,   -32,   -32,    57,   -32,    58,    59,    62,
-      49,    12,    12,    12,    25,    63,    66,    32,   -32,   -32,
-     -32,   -32,   -32,    55,   -32,   -32,   -32,   -32,   -32,     3,
-      72,    72,    72,    72,   -32,   -32,    56,    12,    12,    12,
-      12,   -32,    69,    70,   -32,    73,   -32,   -32,   -32,   -32,
-      71,    74,    27,    27,   -32,   -32,   -32,   -32,   -32,   -32
+       5,   -16,    13,    14,   -16,     5,   -16,    -2,   -16,   -16,
+     -16,    -2,    -3,     6,   -16,    -2,     0,   -16,   -16,   -16,
+     -16,   -16,   -16,    -2,    -2,    -2,    -2,     6,     6,   -16,
+     -16
 };
 
   /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -635,28 +561,24 @@ static const yytype_int8 yypact[] =
      means the default is an error.  */
 static const yytype_int8 yydefact[] =
 {
-       0,     3,     0,     0,     0,     5,    10,     9,     0,     0,
-       1,    23,     0,     2,     0,     0,     4,     0,     6,     0,
-       7,     0,     0,    15,    16,     0,     8,     0,    45,    44,
-      43,     0,     0,     0,     0,     0,    26,     0,    11,    12,
-      19,    20,    21,     0,    45,    44,    43,    42,    41,     0,
-       0,     0,     0,     0,    24,    25,     0,     0,     0,     0,
-       0,    22,     0,     0,    40,     0,    27,    28,    29,    30,
-       0,     0,    36,    37,    38,    39,    32,    34,    33,    35
+       0,     2,     0,     0,     1,     5,     3,     0,    19,    20,
+      17,     0,     4,    10,    15,     0,     0,     6,     8,    11,
+      13,    18,    16,     0,     0,     0,     0,     7,     9,    12,
+      14
 };
 
   /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -32,   -32,    75,   -32,   -32,   -32,    37,   -32,   -32,     4,
-     -32,   -32,   -31
+     -16,    20,   -16,   -16,    10,   -16,   -16,    -6,   -16,   -16,
+     -15,   -16
 };
 
   /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-      -1,     3,     4,     5,     8,     9,    13,    14,    15,    34,
-      35,    36,    37
+      -1,     5,     3,     7,    12,    23,    24,    13,    25,    26,
+      14,    15
 };
 
   /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -664,64 +586,42 @@ static const yytype_int8 yydefgoto[] =
      number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      47,    48,    49,    28,    29,    20,    30,    21,    31,    32,
-       2,    57,    58,    59,    60,    44,    45,     6,    46,    33,
-      31,    32,     7,    64,    18,    19,    72,    73,    74,    75,
-     -13,    33,   -13,    50,    51,    52,    53,    59,    60,    54,
-      57,    58,    59,    60,    -5,     1,    61,   -17,    11,     2,
-      -5,    23,    24,    12,    66,    67,    68,    69,    62,    70,
-      10,    63,    71,    42,   -14,    43,    17,   -18,    25,    22,
-      26,    27,     0,    40,    38,    39,    41,    55,    65,     0,
-      16,     0,    56,     0,     0,     0,    76,    77,    78,    43,
-       0,    79
+      21,     8,     9,    17,    18,    10,    17,    18,     1,    11,
+      29,    30,    22,     4,    19,    20,     1,    27,    28,     6,
+       2,    16
 };
 
 static const yytype_int8 yycheck[] =
 {
-      31,    32,    33,     3,     4,    14,     6,    16,     8,     9,
-       5,     8,     9,    10,    11,     3,     4,     1,     6,    19,
-       8,     9,     6,    20,    14,    15,    57,    58,    59,    60,
-      14,    19,    16,     8,     9,    10,    11,    10,    11,    14,
-       8,     9,    10,    11,     0,     1,    14,     0,     1,     5,
-       6,    14,    15,     6,    50,    51,    52,    53,     3,     3,
-       0,     6,     6,    14,    16,    16,    16,     0,     3,    18,
-       6,     3,    -1,    14,    17,    17,    14,    14,     6,    -1,
-       5,    -1,    16,    -1,    -1,    -1,    17,    17,    17,    16,
-      -1,    17
+      15,     3,     4,     6,     7,     7,     6,     7,     3,    11,
+      25,    26,    12,     0,     8,     9,     3,    23,    24,     5,
+       0,    11
 };
 
   /* YYSTOS[STATE-NUM] -- The (internal number of the) accessing
      symbol of state STATE-NUM.  */
 static const yytype_int8 yystos[] =
 {
-       0,     1,     5,    22,    23,    24,     1,     6,    25,    26,
-       0,     1,     6,    27,    28,    29,    23,    16,    14,    15,
-      14,    16,    18,    27,    27,     3,     6,     3,     3,     4,
-       6,     8,     9,    19,    30,    31,    32,    33,    17,    17,
-      14,    14,    14,    16,     3,     4,     6,    33,    33,    33,
-       8,     9,    10,    11,    14,    14,    16,     8,     9,    10,
-      11,    14,     3,     6,    20,     6,    30,    30,    30,    30,
-       3,     6,    33,    33,    33,    33,    17,    17,    17,    17
+       0,     3,    14,    15,     0,    14,     5,    16,     3,     4,
+       7,    11,    17,    20,    23,    24,    17,     6,     7,     8,
+       9,    23,    12,    18,    19,    21,    22,    20,    20,    23,
+      23
 };
 
   /* YYR1[YYN] -- Symbol number of symbol that rule YYN derives.  */
 static const yytype_int8 yyr1[] =
 {
-       0,    21,    22,    22,    23,    23,    24,    24,    25,    25,
-      25,    26,    26,    26,    26,    27,    27,    27,    27,    28,
-      28,    28,    28,    28,    29,    29,    30,    31,    31,    31,
-      31,    31,    32,    32,    32,    32,    33,    33,    33,    33,
-      33,    33,    33,    33,    33,    33
+       0,    13,    15,    16,    14,    14,    18,    17,    19,    17,
+      17,    21,    20,    22,    20,    20,    23,    24,    23,    23,
+      23
 };
 
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     2,     1,     2,     0,     3,     3,     3,     1,
-       1,     4,     4,     0,     1,     2,     2,     0,     1,     4,
-       4,     4,     4,     1,     4,     4,     1,     3,     3,     3,
-       3,     1,     4,     4,     4,     4,     3,     3,     3,     3,
-       3,     2,     2,     1,     1,     1
+       0,     2,     0,     0,     5,     2,     0,     4,     0,     4,
+       1,     0,     4,     0,     4,     1,     3,     0,     3,     1,
+       1
 };
 
 
@@ -1416,576 +1316,98 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
+  case 2:
+#line 22 "hw3.y"
+      {push();}
+#line 1323 "y.tab.c"
+    break;
+
   case 3:
-#line 92 "hw3_1.y"
-                { yyerror('재입력하시오\n'); }
-#line 1423 "y.tab.c"
+#line 22 "hw3.y"
+                   {push();}
+#line 1329 "y.tab.c"
+    break;
+
+  case 4:
+#line 22 "hw3.y"
+                              {codegen_assign();}
+#line 1335 "y.tab.c"
     break;
 
   case 6:
-#line 100 "hw3_1.y"
-                          {lineNo++;}
-#line 1429 "y.tab.c"
+#line 25 "hw3.y"
+         {push();}
+#line 1341 "y.tab.c"
     break;
 
   case 7:
-#line 101 "hw3_1.y"
-                          {lineNo++;}
-#line 1435 "y.tab.c"
+#line 25 "hw3.y"
+                    {codegen();}
+#line 1347 "y.tab.c"
     break;
 
   case 8:
-#line 104 "hw3_1.y"
-                        {   // 콤마 변수 선언
-                            int i;
-                            i=search_symbol((yyvsp[0].string));
-                            if(i!=-1)
-                              yyerror("syntax error: Multiple Declaration of Variable");
-                            else
-                              make_symtab_entry((yyvsp[0].string),(yyvsp[-3].string),0); // $3를 테이블 엔트리에 저장, 타입은 string타입으로 $0(이 rule이 적용되기 전의 stack의 top위치), val은 0으로 초기화
-                        }
-#line 1448 "y.tab.c"
+#line 26 "hw3.y"
+          {push();}
+#line 1353 "y.tab.c"
     break;
 
   case 9:
-#line 113 "hw3_1.y"
-                        {                
-                            int i;
-                            i=search_symbol((yyvsp[0].string));
-                            if(i!=-1)
-                              yyerror("syntax error: Multiple Declaration of Variable");
-                            else
-                              make_symtab_entry((yyvsp[0].string),(yyvsp[-1].string),0);
-                        }
-#line 1461 "y.tab.c"
+#line 26 "hw3.y"
+                     {codegen();}
+#line 1359 "y.tab.c"
     break;
 
   case 11:
-#line 124 "hw3_1.y"
-                                {
-                                    strcpy(arr_temp_name, (yyvsp[-3].string));
-                                    strcpy(arr_first_temp_type, (yyvsp[-4].string));
-                                    char arr_type[30] = "array(";
-                                    strcpy(arr_temp_type, make_arr_type((yyvsp[-1].ival), arr_first_temp_type, arr_type));
-                                    arrcnt++;
-                                    make_symtab_entry(arr_temp_name, arr_temp_type, 0);
-                                }
-#line 1474 "y.tab.c"
+#line 29 "hw3.y"
+         {push();}
+#line 1365 "y.tab.c"
     break;
 
   case 12:
-#line 133 "hw3_1.y"
-                                {
-                                    char* temp;
-                                    char* temp1;
-                                    char* temp2;
-                                    char arr_type[30] = "array(";
-                                    // printf("cnt: -----%d----\n", arrcnt);
-                                    if(arrcnt>=2) {
-                                      // printf("first: %s\n", arr_first_temp_type);
-                                      strcpy(arr_second_temp_type, arr_first_temp_type);
-                                      strcpy(arr_first_temp_type, "");
-                                    }
-                                    strcpy(arr_first_temp_type, make_arr_type((yyvsp[-1].ival), arr_first_temp_type, arr_type)); // arr(3, int)
-                                      if(arrcnt>=2) { // 3차원 배열 타입선언을 위한 코드
-                                      memmove(arr_second_temp_type + (arrcnt-1)*8 + 1*(arrcnt-1), arr_first_temp_type, strlen(arr_first_temp_type));
-                                      memmove(arr_temp_type + (arrcnt-1)*8 + 1*(arrcnt-1), arr_second_temp_type, strlen(arr_second_temp_type));
-                                    } else {
-                                      // printf("--\n");
-                                      memmove(arr_temp_type + arrcnt*8 + 1*arrcnt, arr_first_temp_type, strlen(arr_first_temp_type));
-                                    }
-                                    make_symtab_entry(arr_temp_name, arr_temp_type, 0);
-                                    arrcnt++;
-                                  }
-#line 1501 "y.tab.c"
+#line 29 "hw3.y"
+                    {codegen();}
+#line 1371 "y.tab.c"
+    break;
+
+  case 13:
+#line 30 "hw3.y"
+          {push();}
+#line 1377 "y.tab.c"
+    break;
+
+  case 14:
+#line 30 "hw3.y"
+                     {codegen();}
+#line 1383 "y.tab.c"
+    break;
+
+  case 17:
+#line 34 "hw3.y"
+        {push();}
+#line 1389 "y.tab.c"
+    break;
+
+  case 18:
+#line 34 "hw3.y"
+                   {codegen_umin();}
+#line 1395 "y.tab.c"
     break;
 
   case 19:
-#line 167 "hw3_1.y"
-                          {
-                            int i;
-                            i=search_symbol((yyvsp[-3].string));
-                            char s1[10];
-                            if(i==-1) {
-                              // yyerror("\n Undefined Variable");
-                              make_symtab_entry((yyvsp[-3].string), "int", 0);
-                              sprintf(s1, "%d", (yyvsp[-1].ival));
-                              addQuadruple("=","",s1,(yyvsp[-3].string));
-                            }
-                            else {
-                              char temp[10];
-                              if(strcmp(Sym[i].sym_type,"int")==0) // *****
-                                sprintf(temp,"%d",(int)(yyvsp[-1].ival));
-                              else
-                                  snprintf(temp,10,"%f",(yyvsp[-1].ival));
-                              addQuadruple("=","",temp,(yyvsp[-3].string));
-                              
-                            }
-                            lineNo++;
-                   }
-#line 1527 "y.tab.c"
+#line 35 "hw3.y"
+       {push();}
+#line 1401 "y.tab.c"
     break;
 
   case 20:
-#line 189 "hw3_1.y"
-                        {
-                            int i;
-                            i=search_symbol((yyvsp[-3].string));
-                            char s1[10];
-                            if(i==-1) {
-                              // yyerror("\n Undefined Variable");
-                              make_symtab_entry((yyvsp[-3].string), "double", 0);
-                              sprintf(s1, "%f", (yyvsp[-1].dval));
-                              // printf("%s\n", s1);
-                              addQuadruple("=","",s1,(yyvsp[-3].string));
-                            }
-                            else {
-                              char temp[10];
-                              if(strcmp(Sym[i].sym_type,"int")==0) // *****
-                                sprintf(temp,"%d",(int)(yyvsp[-1].dval));
-                              else
-                                  snprintf(temp,10,"%f",(yyvsp[-1].dval));
-                              addQuadruple("=","",temp,(yyvsp[-3].string));
-                            }
-                            lineNo++;
-                   }
-#line 1553 "y.tab.c"
-    break;
-
-  case 21:
-#line 211 "hw3_1.y"
-                   {
-                        int i,j;
-                        i=search_symbol((yyvsp[-3].string));
-                        j=search_symbol((yyvsp[-1].string));
-                        if(i==-1 || j==-1){
-                          // yyerror("\nsyntax error Undefined Variable");
-                          make_symtab_entry((yyvsp[-3].string), "int", 0); // 타입 없이 a = t와 같은 형태인 경우
-                          make_symtab_entry((yyvsp[-1].string), "int", 0); // 임의로 int로 타입 지정
-                          addQuadruple("=","",(yyvsp[-1].string),(yyvsp[-3].string));
-                        }
-                        else
-                          addQuadruple("=","",(yyvsp[-1].string),(yyvsp[-3].string));
-                        lineNo++;
-                    }
-#line 1572 "y.tab.c"
-    break;
-
-  case 22:
-#line 226 "hw3_1.y"
-                           { 
-                              char* temp;
-                              char* temp1;
-                              char* um = "-";
-                              int i;
-                              i=search_symbol((yyvsp[-3].string));
-                              if(i==-1)
-                              {
-                                // yyerror("\n Undefined Variable\n");
-                                make_symtab_entry((yyvsp[-3].string), Stk.types[Stk.top], 0);
-                              }
-                              temp = Stk.items[Stk.top];
-                              temp1 = Stk.types[Stk.top];
-                              // printf("stacktop: %s\n", temp);
-                              if(strncmp(temp, um, 1) == 0) { // unary일 경우..
-                                char str[5],str1[5]="t";
-                                sprintf(str, "%d", temp_var);
-                                strcat(str1,str);                   
-                                temp_var++;
-                                addQuadruple("=","",pop(),str1);
-                                push(str1, temp1);
-                                addQuadruple("=","",pop(),(yyvsp[-3].string));
-                              } else {
-                                addQuadruple("=","",pop(),(yyvsp[-3].string));
-                              }
-                              lineNo++;
-                           }
-#line 1604 "y.tab.c"
-    break;
-
-  case 24:
-#line 256 "hw3_1.y"
-                                {                          
-                              addQuadruple("=","",pop(),(yyvsp[-3].string));
-                              temp_var++;
-                              lineNo++;
-                        }
-#line 1614 "y.tab.c"
-    break;
-
-  case 25:
-#line 261 "hw3_1.y"
-                            {lineNo++;}
-#line 1620 "y.tab.c"
-    break;
-
-  case 26:
-#line 263 "hw3_1.y"
-                         {
-                      // printf("array 중간코드 생성 %d!!!\n", arrcnt);
-                      int i;
-                      char* k;
-                      int t;
-                      char*j;
-                      char str[5],str1[5]="t";
-                      char str2[5], str3[5] ="t";
-                      char str4[5], str5[5] ="t";
-                      sprintf(str, "%d", temp_var);    // 버퍼 str에 있는 t와 temp_var 0을 붙임 -> t0, t1 ..... 등 temporary 변수 생성
-                      strcat(str1,str);
-                      temp_var++;
-                      for(i=0;i<sym_cnt;i++)
-                      {
-                        if(strncmp(Sym[i].sym_type, "array", 5)==0) // array타입이 심볼 테이블에 있는지 확인
-                        {
-                          j = Sym[i].sym_type;
-                        }
-                      }
-                      // printf("---%s---\n", j);
-                      // printf("---%s---\n", arr_temp_type);
-                      // printf("---%c---\n", arr_temp_type[15]);
-                      if(arrStmtCnt == 1) {
-                          char s1[20];       // 변환한 문자열을 저장할 배열
-                          char s2[20];       // 변환한 문자열을 저장할 배열
-                          // char s3[10];       // 변환한 문자열을 저장할 배열
-                          if(first_int_array_param != 0){
-                            // printf("%d\n", first_int_array_param);
-                            sprintf(s1, "%d", first_int_array_param);
-                            // printf("s1왜 안찍히냐 %s\n",s1);
-                            strcpy(s2, s1);
-                            addQuadruple("*", "4", s2, str1);
-                          }
-                          if(strlen(first_char_array_param) != 0){
-                            strcpy(s1, first_char_array_param);
-                            addQuadruple("*", "4", s1, str1);
-                          }
-                          strcpy(arrName, arr_temp_name);
-                          strcat(arrName, "[");
-                          strcat(arrName, str1);
-                          strcat(arrName, "]");
-                          // printf("%s\n", arrName);
-                          sprintf(str4, "%d", temp_var);
-                          memmove(str5+1, str4, 1);
-                          addQuadruple("=","", arrName, str5);
-                          push(str5, arr_temp_type);
-                      } else if (arrStmtCnt == 2) {
-                        //addQuadruple("",pop(),pop(),str1);
-                        // printf("first param, second param: %d %d\n", first_int_array_param, second_int_array_param);
-                        
-                        char s1[10];       // 변환한 문자열을 저장할 배열
-                        char s2[10];       // 변환한 문자열을 저장할 배열
-                        char s3[10];       // 변환한 문자열을 저장할 배열
-                        
-                        k = (arr_temp_type + 15);
-                        // printf("%d\n", atoi(k));
-                        t = atoi(k) * 4;
-                        if(first_int_array_param != 0){
-                          sprintf(s1, "%d", first_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
-                        }
-                        if(strlen(first_char_array_param) != 0)
-                          strcpy(s1, first_char_array_param);
-                        if(second_int_array_param != 0){
-                          sprintf(s2, "%d", second_int_array_param);    // %d를 지정하여 정수를 문자열로 저장
-                        }
-                        if(strlen(second_char_array_param) != 0)
-                          strcpy(s2, second_char_array_param);
-                        sprintf(s3, "%d", t);    // %d를 지정하여 정수를 문자열로 저장
-                        // printf("first param, second param: %s %s\n", s1, s2);
-                        // printf("%d\n",atoi(arr_temp_type[15]));
-                        addQuadruple("*", s3, s1, str1);
-                        sprintf(str2, "%d", temp_var);
-                        strcat(str3,str2);
-                        addQuadruple("*", "4", s2, str3);
-                        temp_var++;
-                        sprintf(str4, "%d", temp_var);
-                        strcat(str5,str4);
-                        addQuadruple("+", str3, str1, str5);
-                        strcpy(arrName, arr_temp_name);
-                        strcat(arrName, "[");
-                        strcat(arrName, str5);
-                        strcat(arrName, "]");
-                        // printf("%s\n", arrName);
-                        temp_var++;
-                        sprintf(str4, "%d", temp_var);
-                        memmove(str5+1, str4, 1);
-                        addQuadruple("=","", arrName, str5);
-                        push(str5, arr_temp_type);
-                        // addQuadruple("=","",pop(),$1);
-                        // temp_var++;
-                      }
-                    }
-#line 1717 "y.tab.c"
-    break;
-
-  case 27:
-#line 357 "hw3_1.y"
-                                     { 
-                                printf("array plus\n"); 
-                                // char str[5],str1[5]="t";
-                                // sprintf(str, "%d", temp_var);    // 버퍼 str에 있는 t와 temp_var 0을 붙임 -> t0, t1 ..... 등 temporary 변수 생성
-                                // strcat(str1,str);
-                                // temp_var++;
-                                // addQuadruple("+",pop(), str1, str1);
-                             }
-#line 1730 "y.tab.c"
-    break;
-
-  case 28:
-#line 365 "hw3_1.y"
-                                     { printf("array minus\n"); }
-#line 1736 "y.tab.c"
-    break;
-
-  case 29:
-#line 366 "hw3_1.y"
-                                     { printf("array mul\n"); }
-#line 1742 "y.tab.c"
-    break;
-
-  case 30:
-#line 367 "hw3_1.y"
-                                     { printf("array div\n"); }
-#line 1748 "y.tab.c"
-    break;
-
-  case 32:
-#line 371 "hw3_1.y"
-                                      { first_int_array_param = (yyvsp[-1].ival); arrStmtCnt++;}
-#line 1754 "y.tab.c"
-    break;
-
-  case 33:
-#line 373 "hw3_1.y"
-                                      { second_int_array_param = (yyvsp[-1].ival); arrStmtCnt++;}
-#line 1760 "y.tab.c"
-    break;
-
-  case 34:
-#line 375 "hw3_1.y"
-                                { strcpy(first_char_array_param, (yyvsp[-1].string)); arrStmtCnt++;}
-#line 1766 "y.tab.c"
-    break;
-
-  case 35:
-#line 377 "hw3_1.y"
-                                  { strcpy(second_char_array_param, (yyvsp[-1].string)); arrStmtCnt++;}
-#line 1772 "y.tab.c"
-    break;
-
-  case 36:
-#line 382 "hw3_1.y"
-                      {
-                        char str[5],str1[5]="t"; // 버퍼 선언
-                        char str2[5], str3[5] ="t"; // 초기 temp_var = 0을 str버퍼에 저장
-                        sprintf(str, "%d", temp_var);    // 버퍼 str에 있는 t와 temp_var 0을 붙임 -> t0, t1 ..... 등 temporary 변수 생성
-                        strcat(str1,str);                   
-                        temp_var++;                       // temp_var 증가
-                        // printf("----%s----\n", Stk.types[Stk.top]);
-                        // printf("----%s----\n", Stk.types[Stk.top-1]); // t1 = inttoreal r
-                        if(strcmp(Stk.types[Stk.top-1], "double") == 0 && strcmp(Stk.types[Stk.top], "int") == 0) {
-                            addQuadruple("",pop(), "inttoreal",str1); // result는 str1으로 -> t0..
-                            push(str1, "double");
-                            sprintf(str2, "%d", temp_var);
-                            strcat(str3,str2);
-                            temp_var++;
-                            addQuadruple("+",pop(),pop(),str3);    // void addQuadruple(char op[10],char op2[10],char op1[10],char res[10])        
-                            push(str3, "double");
-                        } else if (strcmp(Stk.types[Stk.top], "double") == 0 && strcmp(Stk.types[Stk.top-1], "int") == 0) {
-                            char* temp;
-                            temp = pop(); // b
-                            addQuadruple("",pop(), "inttoreal",str1);  // a inttoreal
-                            push(str1, "double");
-                            push(temp, "double");
-                            sprintf(str2, "%d", temp_var);
-                            strcat(str3,str2);
-                            temp_var++;
-                            addQuadruple("+",pop(),pop(),str3);    
-                            push(str3, "double");
-                        } else if (strcmp(Stk.types[Stk.top], "int") == 0 && strcmp(Stk.types[Stk.top-1], "int") == 0) {
-                            addQuadruple("+",pop(),pop(),str1);    
-                            push(str1, "int");
-                        } else {
-                            addQuadruple("+",pop(),pop(),str1);    
-                            push(str1, "double");
-                        }
-                    }
-#line 1812 "y.tab.c"
-    break;
-
-  case 37:
-#line 417 "hw3_1.y"
-                     {
-                        char str[5],str1[5]="t"; // 버퍼 선언
-                        char str2[5], str3[5] ="t"; // 초기 temp_var = 0을 str버퍼에 저장
-                        sprintf(str, "%d", temp_var);    // 버퍼 str에 있는 t와 temp_var 0을 붙임 -> t0, t1 ..... 등 temporary 변수 생성
-                        strcat(str1,str);                   
-                        temp_var++;                       // temp_var 증가
-                        // printf("----%s----\n", Stk.types[Stk.top]);
-                        // printf("----%s----\n", Stk.types[Stk.top-1]); // t1 = inttoreal r
-                        if(strcmp(Stk.types[Stk.top-1], "double") == 0 && strcmp(Stk.types[Stk.top], "int") == 0) {
-                            addQuadruple("",pop(), "inttoreal",str1); // result는 str1으로 -> t0..
-                            push(str1, "double");
-                            sprintf(str2, "%d", temp_var);
-                            strcat(str3,str2);
-                            temp_var++;
-                            addQuadruple("-",pop(),pop(),str3);    // void addQuadruple(char op[10],char op2[10],char op1[10],char res[10])        
-                            push(str3, "double");
-                        } else if (strcmp(Stk.types[Stk.top], "double") == 0 && strcmp(Stk.types[Stk.top-1], "int") == 0) {
-                            char* temp;
-                            temp = pop(); // b
-                            addQuadruple("",pop(), "inttoreal",str1);  // a inttoreal
-                            push(str1, "double");
-                            push(temp, "double");
-                            sprintf(str2, "%d", temp_var);
-                            strcat(str3,str2);
-                            temp_var++;
-                            addQuadruple("-",pop(),pop(),str3);    
-                            push(str3, "double");
-                        } else if (strcmp(Stk.types[Stk.top], "int") == 0 && strcmp(Stk.types[Stk.top-1], "int") == 0) {
-                            addQuadruple("-",pop(),pop(),str1);    
-                            push(str1, "int");
-                        } else {
-                            addQuadruple("-",pop(),pop(),str1);    
-                            push(str1, "double");
-                        }
-                    }
-#line 1852 "y.tab.c"
-    break;
-
-  case 38:
-#line 453 "hw3_1.y"
-                    {
-                    char str[5],str1[5]="t"; // 버퍼 선언
-                        char str2[5], str3[5] ="t"; // 초기 temp_var = 0을 str버퍼에 저장
-                        sprintf(str, "%d", temp_var);    // 버퍼 str에 있는 t와 temp_var 0을 붙임 -> t0, t1 ..... 등 temporary 변수 생성
-                        strcat(str1,str);                   
-                        temp_var++;                       // temp_var 증가
-                        // printf("----%s----\n", Stk.types[Stk.top]);
-                        // printf("----%s----\n", Stk.types[Stk.top-1]); // t1 = inttoreal r
-                        if(strcmp(Stk.types[Stk.top-1], "double") == 0 && strcmp(Stk.types[Stk.top], "int") == 0) {
-                            addQuadruple("",pop(), "inttoreal",str1); // result는 str1으로 -> t0..
-                            push(str1, "double");
-                            sprintf(str2, "%d", temp_var);
-                            strcat(str3,str2);
-                            temp_var++;
-                            addQuadruple("*",pop(),pop(),str3);    // void addQuadruple(char op[10],char op2[10],char op1[10],char res[10])        
-                            push(str3, "double");
-                        } else if (strcmp(Stk.types[Stk.top], "double") == 0 && strcmp(Stk.types[Stk.top-1], "int") == 0) {
-                            char* temp;
-                            temp = pop(); // b
-                            addQuadruple("",pop(), "inttoreal",str1);  // a inttoreal
-                            push(str1, "double");
-                            push(temp, "double");
-                            sprintf(str2, "%d", temp_var);
-                            strcat(str3,str2);
-                            temp_var++;
-                            addQuadruple("*",pop(),pop(),str3);    
-                            push(str3, "double");
-                        } else if (strcmp(Stk.types[Stk.top], "int") == 0 && strcmp(Stk.types[Stk.top-1], "int") == 0) {
-                            addQuadruple("*",pop(),pop(),str1);    
-                            push(str1, "int");
-                        } else {
-                            addQuadruple("*",pop(),pop(),str1);    
-                            push(str1, "double");
-                        }
-                }
-#line 1892 "y.tab.c"
-    break;
-
-  case 39:
-#line 489 "hw3_1.y"
-                    {
-                        char str[5],str1[5]="t"; // 버퍼 선언
-                        char str2[5], str3[5] ="t"; // 초기 temp_var = 0을 str버퍼에 저장
-                        sprintf(str, "%d", temp_var);    // 버퍼 str에 있는 t와 temp_var 0을 붙임 -> t0, t1 ..... 등 temporary 변수 생성
-                        strcat(str1,str);                   
-                        temp_var++;                       // temp_var 증가
-                        // printf("----%s----\n", Stk.types[Stk.top]);
-                        // printf("----%s----\n", Stk.types[Stk.top-1]); // t1 = inttoreal r
-                        if((yyvsp[0].string) == 0) {
-                          yyerror('divide by zero');
-                        } else if(strcmp(Stk.types[Stk.top-1], "double") == 0 && strcmp(Stk.types[Stk.top], "int") == 0) {
-                            addQuadruple("",pop(), "inttoreal",str1); // result는 str1으로 -> t0..
-                            push(str1, "double");
-                            sprintf(str2, "%d", temp_var);
-                            strcat(str3,str2);
-                            temp_var++;
-                            addQuadruple("/",pop(),pop(),str3);    // void addQuadruple(char op[10],char op2[10],char op1[10],char res[10])        
-                            push(str3, "double");
-                        } else if (strcmp(Stk.types[Stk.top], "double") == 0 && strcmp(Stk.types[Stk.top-1], "int") == 0) {
-                            char* temp;
-                            temp = pop(); // b
-                            addQuadruple("",pop(), "inttoreal",str1);  // a inttoreal
-                            push(str1, "double");
-                            push(temp, "double");
-                            sprintf(str2, "%d", temp_var);
-                            strcat(str3,str2);
-                            temp_var++;
-                            addQuadruple("/",pop(),pop(),str3);    
-                            push(str3, "double");
-                        } else if (strcmp(Stk.types[Stk.top], "int") == 0 && strcmp(Stk.types[Stk.top-1], "int") == 0) {
-                            addQuadruple("/",pop(),pop(),str1);    
-                            push(str1, "int");
-                        } else {
-                            addQuadruple("/",pop(),pop(),str1);    
-                            push(str1, "double");
-                        }
-                    }
-#line 1934 "y.tab.c"
-    break;
-
-  case 41:
-#line 529 "hw3_1.y"
-                              {
-                                char* temp;
-                                char temp1[5] = "-";
-                                temp = pop();
-                                strcat(temp1, temp);   // int snprintf ( char * s, size_t n, const char * format, ... ); 버퍼에 저장, 크기만큼 리턴
-                                push(temp1, "int");
-                              }
-#line 1946 "y.tab.c"
-    break;
-
-  case 43:
-#line 539 "hw3_1.y"
-         {                     
-        int i;
-        char* j;
-        i=search_symbol((yyvsp[0].string));
-        j = search_symbol_type((yyvsp[0].string));
-        //printf("-----%s type: %s-----\n",$1 ,j);
-        if(i==-1) // symbol table에 없는 경우
-        {
-          // printf("\n Undefined Variable\n");
-          make_symtab_entry((yyvsp[0].string), "int", 0);
-        }
-         else // 있으면 index i리턴
-          push((yyvsp[0].string), j);              
-        }
-#line 1965 "y.tab.c"
-    break;
-
-  case 44:
-#line 554 "hw3_1.y"
-             {       
-                char temp[10]; // 버퍼 선언
-                snprintf(temp,10,"%f",(yyvsp[0].dval));   // int snprintf ( char * s, size_t n, const char * format, ... ); 버퍼에 저장, 크기만큼 리턴
-                push(temp, "double");               // 저장된 버퍼를 스택에 push
-            }
-#line 1975 "y.tab.c"
-    break;
-
-  case 45:
-#line 560 "hw3_1.y"
-              {       
-                char temp[10]; // 버퍼 선언
-                snprintf(temp,10,"%d",(yyvsp[0].ival));   // int snprintf ( char * s, size_t n, const char * format, ... ); 버퍼에 저장, 크기만큼 리턴
-                push(temp, "int");               // 저장된 버퍼를 스택에 push
-            }
-#line 1985 "y.tab.c"
+#line 36 "hw3.y"
+        {push();}
+#line 1407 "y.tab.c"
     break;
 
 
-#line 1989 "y.tab.c"
+#line 1411 "y.tab.c"
 
       default: break;
     }
@@ -2217,204 +1639,53 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 568 "hw3_1.y"
+#line 38 "hw3.y"
 
 
-extern FILE *yyin;
+char st[100][10];
+int top=0;
+char i_[2]="0";
+char temp[2]="t";
+
+void yyerror(const char* msg)
+{
+    fprintf(stderr, "%s\n", msg);
+}
+
 int main()
-{
-   
-  Stk.top = -1; // 스택의 top을 -1로 초기화
-  yyin = fopen("exp.in","r");
-  yyparse();
-  display_sym_tab();
-  printf("\n\n");
-  display_Quadruple();
-  printf("\n\n");
-  return(0);
-}
-
-
-void strintrude (char *s, char *t, int i) 
-{     
-/*문자열 s의 i 번째 위치에 문자열 t를 삽입*/ 
-  int cnt; 
-  char string[100], *temp = string; 
-  for(cnt = 0 ; cnt < 100 ; cnt++) // init 
-    string[cnt] = '\0';
-  if( i < 0 && i > (int)strlen(s)) 
-  {         
-    fprintf(stderr, "position is out of bounds \n");         
-    exit (1);         
-  } 
-  if (!strlen(s))         
-  { 
-    strcpy (s, t);         
-  } 
-  else if (strlen(t))  
-  {     
-    strcat(t,(s+i)); 
-    strcpy((s+i),t); 
-  }     
-}
-
-char* make_arr_type(int num, char type[10], char* arr_type)
-{
-  // char* arr_type = malloc(30);
-  // strcpy(arr_type, "array(");
-  char s[10];       // 변환한 문자열을 저장할 배열
-  sprintf(s, "%d", num); 
-  // printf("%s\n", s);
-  strcat(arr_type, s);
-  strcat(arr_type, ", ");
-  strcat(arr_type, type);
-  strcat(arr_type, ")");
-  // printf("%s\n", arr_type);
-  return arr_type;
-}
-
-int search_symbol(char sym[10])
-{
-  int i,flag=0;
-  for(i=0;i<sym_cnt;i++)
-  {
-    if(strcmp(Sym[i].sym_name,sym)==0) // 심볼 테이블에 있는지 확인
-    {
-      flag=1;
-      break;
-    }
-  }
-  if(flag==0) // 없는 경우
-    return(-1);
-  else        // 있는 경우
-    return(i);
-}
-char* search_symbol_type(char sym[10])
-{
-  int i;
-  char*j;
-  for(i=0;i<sym_cnt;i++)
-  {
-    if(strcmp(Sym[i].sym_name,sym)==0) // 심볼 테이블에 있는지 확인
-    {
-      return Sym[i].sym_type;
-    }
-  }
-  return NULL;
-}
-
-void make_symtab_entry(char sym[10],char dtype[10],double val)
-{
-  for(int i=0;i<sym_cnt;i++) { // 이차원 배열 심볼테이블에 덮어쓰기
-    if (strcmp(Sym[i].sym_name, sym) == 0) { // 같은게 있으면
-      strcpy(Sym[i].sym_name,sym);
-      strcpy(Sym[i].sym_type,dtype);
-      Sym[i].value=val;
-      Sym[i].sym_offset = offset;
-      offset += 8;
-      return;
-    }
-  }
-  strcpy(Sym[sym_cnt].sym_name,sym);
-  strcpy(Sym[sym_cnt].sym_type,dtype);
-  Sym[sym_cnt].value=val; // 변수선언시에 0으로 저장
-  if(strcmp(Sym[sym_cnt].sym_type, "int") == 0) {
-    Sym[sym_cnt].sym_offset = offset;
-    offset += 4;
-  } else {
-    Sym[sym_cnt].sym_offset = offset;
-    offset += 8;
-  }
-  sym_cnt++;
-}
-
-
-void display_sym_tab()
-{
-  int i;
-  printf("------------The Symbol Table--------\n\n");
-  // printf(" Name   Type    offset    Value");
-  // for(i=0;i<sym_cnt;i++)
-  //   fprintf(stdout, "\n %s      %s    %d       %f",Sym[i].sym_name,Sym[i].sym_type, Sym[i].sym_offset, Sym[i].value);
-  printf(" Name        Type      offset");
-  for(i=0;i<sym_cnt;i++)
-    fprintf(stdout, "\n %s         %s          %d ",Sym[i].sym_name,Sym[i].sym_type, Sym[i].sym_offset);
-  printf("\n\n------------------------------------\n");
-}
-void display_Quadruple()
-{
-  int i;
-  fprintf(stderr, "----------INTERMEDIATE CODE---------\n");
-  //printf("\n     Result  Operator  Operand1  Operand2  ");
-  for(i=0;i<Index;i++) {
-   //printf("\n %d     %s          %s          %s          %s",i,QUAD[i].result,QUAD[i].operator,QUAD[i].operand1,QUAD[i].operand2);
-    if (strcmp(QUAD[i].operator, "=") == 0)
-      fprintf(stderr, "%s = %s\n", QUAD[i].result, QUAD[i].operand1);
-    else 
-      fprintf(stderr, "%s = %s %s %s\n", QUAD[i].result, QUAD[i].operand1, QUAD[i].operator, QUAD[i].operand2);
-  }
-  fprintf(stderr, "------------------------------------\n");
-}
-
-int yyerror(char const *s, int charCnt)
-{
-    if(strcmp(s, "lexical error") == 0) {
-      fprintf(stderr, "%s(%d:%d)\n", s, lineNo, charCnt);
-      return -1;
-    } else {
-      fprintf(stderr, "%s(%d)\n", s, lineNo);
-      return -1;
-    }
-}
-
-// 스택에 push하는 함수
-void push(char *str, char* type) 
-{
-  Stk.top++; // 초기 -1
-  Stk.items[Stk.top]=(char *)malloc(strlen(str)+1);
-  strcpy(Stk.items[Stk.top],str);
-  Stk.types[Stk.top]=(char *)malloc(strlen(type)+1);
-  strcpy(Stk.types[Stk.top],type);
-}
-char * pop()
-{
-  int i;
-  if(Stk.top==-1)
-  {
-     printf("\nStack Empty!! \n");
-     exit(0);
-  }
-  char *str=(char *)malloc(strlen(Stk.items[Stk.top])+1);;
-  strcpy(str,Stk.items[Stk.top]);
-  free(Stk.items[Stk.top]);
-  free(Stk.types[Stk.top]);
-  Stk.top--;
-  return(str);
-}
-
-void addQuadruple(char op[10],char op2[10],char op1[10],char res[10])
  {
-    strcpy(QUAD[Index].operator,op);
-    strcpy(QUAD[Index].operand2,op2);
-    strcpy(QUAD[Index].operand1,op1);
-    strcpy(QUAD[Index].result,res);
-    Index++;
+    printf("Enter the expression : ");
+    yyparse();
+    return 0;
+ }
+
+int push()
+{
+  strcpy(st[++top], yytext);
 }
 
+int codegen()
+ {
+ strcpy(temp,"t");
+ strcat(temp,i_);
+  printf("%s = %s %s %s\n",temp,st[top-2],st[top-1],st[top]);
+  top-=2;
+ strcpy(st[top],temp);
+ i_[0]++;
+ }
 
+int codegen_umin()
+ {
+ strcpy(temp,"t");
+ strcat(temp,i_);
+ printf("%s = -%s\n",temp,st[top]);
+ top--;
+ strcpy(st[top],temp);
+ i_[0]++;
+ }
 
-// int hello_3;
-// int a d c;
-// int a;
-// int arr[2][3];
-// int r; 
-// double pi; 
-// b = 10 a;
-// b = 10++a;
-// b = arr[i][j];
-// r = 5; 
-// pi = 3.14; 
-// area = pi * r * r; 
-// cir = pi * r + pi * r;
-// b = arr[1][2] + arr[2][3];
-// c = arr[1][2] * arr[2][3];
+int codegen_assign()
+ {
+ printf("%s = %s\n",st[top-2],st[top]);
+ top-=2;
+ }
