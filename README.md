@@ -1,5 +1,18 @@
 # Compiler_2022
 
+## HW1
+
+* Lexical Analyzer 구현
+* 수(integer, real number)와 스트링으로 이루어진 수식(assignment 포
+함)의 어휘를 인식하는 lexical analyzer를 작성한다. lex를 사용하지 않고 state
+transition diagram을 그려 이를 기반으로 직접 구현한다
+
+## HW2
+
+* 수식 인터프리터 개발
+* Recursive Descent Parsing 기법을 이용하여 간단한 expression을 위한 인터프리터를 개발한
+다. 
+
 ## HW3
 
 * 중간코드 생성기 개발
